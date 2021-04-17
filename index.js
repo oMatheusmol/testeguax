@@ -26,13 +26,13 @@ let productsDB = [
 ]
 
 const buildProduct = (body) => {
+  if (!body.amount >= 1 && !body.amount <= 1000) return new Error('error')
   return {
     name: body.name,
     price: Number.parseInt(body.price, 10),
-    amount: (amount) => {
-      if (!amount >= 1 && !amount <= 1000) return new Error('error')
+    amount: body.amount
     }
-  }
+
 }
 
 app.get("/products", (req, res) => { res.status(200).send(productsDB) })

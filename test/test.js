@@ -7,11 +7,13 @@ describe('Testes:', () => {
   it('Teste 1', () => {
     const body = {
       name: "teste-unitario",
-      price: "15"
+      price: "15",
+      amount: 3
     }
     const result = index.buildProduct(body);
     assert.strictEqual(result.name, body.name);
-    assert.strictEqual(result.price, 15);
+    assert.strictEqual(result.price, Number.parseInt(body.price));
+    assert.strictEqual(result.amount, Number.parseInt(body.amount));
   })
 
   it('Teste 2', (done) => {
@@ -22,11 +24,13 @@ describe('Testes:', () => {
       .post('/products')
       .send({
         name: 'teste-p',
-        price: '15'
+        price: '15',
+        amount: 10
       })
       .expect(201, {
         name: 'teste-p',
-        price: 15
+        price: 15,
+        amount: 10
       })
       .end(done)
   })
@@ -36,7 +40,8 @@ describe('Testes:', () => {
       .get('/products/teste-p')
       .expect(200, {
         name: 'teste-p',
-        price: 15
+        price: 15,
+        amount: 10
       })
       .end(done)
   })
