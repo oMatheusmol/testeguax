@@ -35,6 +35,11 @@ const buildProduct = (body) => {
   return {
     name: body.name,
     price: Number.parseInt(body.price, 10),
+    amount: (amount=0) => {
+      if (!amount >= 1 && !amount <= 1000) {
+        return new Error('error')
+      }
+    }
   }
 }
 
@@ -43,8 +48,12 @@ app.get("/products", function (req, res) {
 });
 
 app.get("/productsNames", function (req, res) {
-
-  res.status(200).send(productsDB.sort((a, b) => a.price - b.price))
+  let newarr= []
+  for(let prod in productsDB){
+    newarr.push((productsDB[prod].name))
+    
+  }
+  res.status(200).send(newarr)
 });
 
 app.get("/products/:name", function (req, res) {

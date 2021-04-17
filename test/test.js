@@ -48,9 +48,13 @@ describe('Testes:', () => {
       { name: 'galinha', price: 25 },
       { name: 'teste-p', price: 15 }
     ]
+    let newarr=[]
+      for(let prod in resultadoEsperado){
+        newarr.push(resultadoEsperado[prod].name)
+      }
     supertest(index.server)
       .get('/productsNames')
-      .expect(200, resultadoEsperado)
+      .expect(200, newarr )
       .end(done)
   })
 })
