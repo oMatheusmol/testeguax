@@ -9,24 +9,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 let productsDB = [
   {
-    name: 'cachorro', price: 100, amount: (amount) => {
-      if (!amount >= 1 && !amount <= 1000) {
-        return new Error('error')
-      }
+    name: 'cachorro', price: 100, amount: (amount=0) => {
+      if (!amount >= 1 && !amount <= 1000) return new Error('error')
     }
   },
   {
-    name: 'gato', price: 50, amount: (amount) => {
-      if (!amount >= 1 && !amount <= 1000) {
-        return new Error('error')
-      }
+    name: 'gato', price: 50, amount: (amount=0) => {
+      if (!amount >= 1 && !amount <= 1000) return new Error('error')
     }
   },
   {
-    name: 'galinha', price: 25, amount: (amount) => {
-      if (!amount >= 1 && !amount <= 1000) {
-        return new Error('error')
-      }
+    name: 'galinha', price: 25, amount: (amount=0) => {
+      if (!amount >= 1 && !amount <= 1000) return new Error('error')
     }
   }
 ]
@@ -36,9 +30,7 @@ const buildProduct = (body) => {
     name: body.name,
     price: Number.parseInt(body.price, 10),
     amount: (amount=0) => {
-      if (!amount >= 1 && !amount <= 1000) {
-        return new Error('error')
-      }
+      if (!amount >= 1 && !amount <= 1000) return new Error('error')
     }
   }
 }
@@ -50,8 +42,7 @@ app.get("/products", function (req, res) {
 app.get("/productsNames", function (req, res) {
   let newarr= []
   for(let prod in productsDB){
-    newarr.push((productsDB[prod].name))
-    
+    newarr.push((productsDB[prod].name)) 
   }
   res.status(200).send(newarr)
 });
@@ -138,8 +129,9 @@ app.delete("/products/:name", function (req, res) {
   res.status(200).send(productsDB)
 });
 
-var server = app.listen(3000, function () {
+const server = app.listen(3000, function () {
   console.log("Listening on port %s", server.address().port);
+  console.log('http://localhost:3000')
 });
 
 module.exports = {
