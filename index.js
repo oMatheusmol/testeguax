@@ -30,7 +30,7 @@ const buildProduct = (body) => {
   return {
     name: body.name,
     price: Number.parseInt(body.price, 10),
-    amount: body.amount
+    amount: Number.parseInt(body.amount)
     }
 
 }
