@@ -10,30 +10,52 @@ app.use(bodyParser.urlencoded({ extended: true }));
 let productsDB = [
   {
     name: 'cachorro', price: 100, amount: (amount) => {
-      if (!amount >= 1 && !amount <= 1000) return new Error('error')
+      let pack = 0
+      while (amount > 1000) {
+        amount -= 1000
+        pack++
+      }
+      return (pack,amount)
     }
   },
   {
     name: 'gato', price: 50, amount: (amount) => {
-      if (!amount >= 1 && !amount <= 1000) return new Error('error')
+      let pack = 0
+      while (amount > 1000) {
+        amount -= 1000
+        pack++
+      }
+      return (pack,amount)
     }
   },
   {
     name: 'galinha', price: 25, amount: (amount) => {
-      if (!amount >= 1 && !amount <= 1000) return new Error('error')
+      let pack = 0
+      while (amount > 1000) {
+        amount -= 1000
+        pack++
+      }
+      return (pack,amount)
     }
   }
 ]
 
 const buildProduct = (body) => {
-  if (!body.amount >= 1 && !body.amount <= 1000) return new Error('error')
+  let num = Number.parseInt(body.amount)
+  let pack = 0
+  while (num > 1000) {
+    num -= 1000
+    pack++
+  }
   return {
     name: body.name,
     price: Number.parseInt(body.price, 10),
-    amount: Number.parseInt(body.amount)
-    }
+    amount: num,
+    pack: pack
+  }
 
 }
+
 
 app.get("/products", (req, res) => { res.status(200).send(productsDB) })
 
@@ -91,7 +113,7 @@ app.post("/products", (req, res) => {
     if (err) {
       return res.sendStatus(500)
     }
-    
+
     productsDB.push(newProduct)
     res.status(201).send(newProduct)
   })
@@ -99,7 +121,7 @@ app.post("/products", (req, res) => {
 
 app.put("/products/:name", (req, res) => {
   let product = productsDB.find(item => (item.name === req.params.name))
-  
+
   if (!product) {
     return res.sendStatus(500)
   }
@@ -112,7 +134,7 @@ app.put("/products/:name", (req, res) => {
   if (newPrice <= 0) {
     return res.sendStatus(500)
   }
-  
+
   product.price = newPrice
   res.status(200).send(product)
 });
