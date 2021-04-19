@@ -9,57 +9,60 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 let productsDB = [
   {
-    name: 'cachorro', price: 100, amount: (amount) => {
-      let pack = 0
-      while (amount > 1000) {
-        amount -= 1000
-        pack++
-      }
-      return (pack,amount)
-    }
+    name: 'cachorro', price: 110.59, amount: 484654
   },
   {
-    name: 'gato', price: 50, amount: (amount) => {
-      let pack = 0
-      while (amount > 1000) {
-        amount -= 1000
-        pack++
-      }
-      return (pack,amount)
-    }
+    name: 'gato', price: 568.5, amount: 604
   },
   {
-    name: 'galinha', price: 25, amount: (amount) => {
-      let pack = 0
-      while (amount > 1000) {
-        amount -= 1000
-        pack++
-      }
-      return (pack,amount)
-    }
+    name: 'galinha', price: 284, amount: 1060
+  },
+  {
+    name: 'peixe', price: 48, amount: 3145
+  },
+  {
+    name: 'macaco', price: 755, amount: 157
   }
 ]
 
+for(i=0;i<productsDB.length;i++){
+  let num = Number.parseInt(productsDB[i].amount)
+  let pack = 0
+  
+  while(num>1000){
+    num -= 1000
+    pack++
+  }
+
+  productsDB[i].amount = `Packs: ${pack} and ${num} remaining products` 
+}
+
 const buildProduct = (body) => {
   let num = Number.parseInt(body.amount)
+  let price = Number(body.price, 10)
+
+  if(!num || num<1)return res.status(404).send('Amount must be greater than 1!')
+  if(!price || price<=0) return res.status(404).send('Price must be a possitive number!')
+  
   let pack = 0
   while (num > 1000) {
     num -= 1000
     pack++
   }
+  
   return {
     name: body.name,
-    price: Number.parseInt(body.price, 10),
+    price: price,
     amount: num,
     pack: pack
   }
 
 }
 
-
 app.get("/products", (req, res) => { res.status(200).send(productsDB) })
 
 app.get("/productsNames", (req, res) => {
+  productsDB.sort((a, b) => a.price - b.price) 
   let newarr = []
   for (let prod in productsDB) {
     newarr.push((productsDB[prod].name))
@@ -139,12 +142,11 @@ app.put("/products/:name", (req, res) => {
   res.status(200).send(product)
 });
 
-
 app.delete("/products/:name", (req, res) => {
   let product = productsDB.find(item => (item.name === req.params.name))
 
   if (!product) {
-    return res.status(404).send()
+    return res.status(404).send('Product not found!')
   }
 
   productsDB.splice(productsDB.indexOf(product), 1)
